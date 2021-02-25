@@ -17,3 +17,11 @@ SDL_Texture* Entity::getTex(){
 SDL_Rect Entity::getCurrentFrame(){
 	return currentFrame;
 }
+
+bool& Entity::getCollidable(){
+	return collidable;
+}
+
+void Entity::setCollidable(bool x){
+	collidable = x;
+}

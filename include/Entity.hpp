@@ -9,8 +9,11 @@ public:
 	Vector2& getPos();
 	SDL_Texture* getTex();
 	SDL_Rect getCurrentFrame();
-private:
+	bool& getCollidable();
+	void setCollidable(bool x);
+protected:
 	Vector2 pos;
+	bool collidable = false;
 	SDL_Rect currentFrame;
 	SDL_Texture* tex;
 };
