@@ -39,15 +39,6 @@ void Player::MoveDown(){
 			}
 		}
 	}
-	// if(pos.y+16 != 32){
-	// 	pos.y += 16;
-	// }
-	// for(Entity& e : x){
-	// 	if(e.getPos().y != (pos.y+16) && !e.getCollidable()){
-	// 		pos.y += 16;
-	// 		break;
-	// 	}
-	// }
 }
 
 void Player::MoveLeft(){
