@@ -10,13 +10,37 @@
 #include "Tilemap.hpp"
 
 
+void handleInput(SDL_Event* event, Player* character, bool* running){
+	while(SDL_PollEvent(event)){
+		if(event->type == SDL_QUIT )*running = false;
+
+		else if (event->type == SDL_KEYDOWN && event->key.repeat == 0){
+			switch(event->key.keysym.sym){
+				case SDLK_w:
+					character->MoveUp();
+					break;
+				case SDLK_a:
+					character->MoveLeft();
+					break;
+				case SDLK_s:
+					character->MoveDown();
+					break;
+				case SDLK_d:
+					character->MoveRight();
+					break;
+			}
+		}
+	}
+}
+
+
 int main(int argc, char* args[]){
 	if(SDL_Init(SDL_INIT_VIDEO) > 0) std::cout << "aw hell naw sdl done fucked up now: " << SDL_GetError() << std::endl;
 
 	if(!IMG_Init(IMG_INIT_PNG)) std::cout << "aw hell naw sdl_image done fucked up now: " << SDL_GetError() << std::endl;
 
 	RenderWindow window("gateway",512,512);
-	Tilemap tiles("tilemap.tmx");
+	Tilemap tiles("res/dev/tilemap.tmx");
 
 	std::vector<Entity> entities = tiles.createEntities(&window);
 
@@ -33,35 +57,18 @@ int main(int argc, char* args[]){
 
 	while(running){
 		int startTicks = SDL_GetTicks();
+		int seconds = startTicks / 100;
 		float newTime = utils::hireTimeInSeconds();
 		float frameTime = newTime - currentTime;
+
+		character.animate(&seconds);
 
 		currentTime = newTime;
 
 		accumulator += frameTime;
 
 		while(accumulator >= timeStep){
-			while(SDL_PollEvent(&event)){
-				if(event.type == SDL_QUIT )running = false;
-
-				else if (event.type == SDL_KEYDOWN){
-					switch(event.key.keysym.sym){
-						case SDLK_w:
-							character.MoveUp();
-							break;
-						case SDLK_a:
-							character.MoveLeft();
-							break;
-						case SDLK_s:
-							character.MoveDown();
-							break;
-						case SDLK_d:
-							character.MoveRight();
-							break;
-					}
-				}
-			}
-
+			handleInput(&event, &character, &running);
 			accumulator -= timeStep;
 
 		}
@@ -70,8 +77,8 @@ int main(int argc, char* args[]){
 
 		for(Entity& e : entities){
 			window.render(e);
-			window.render(character);
 		}
+		window.render(character);
 
 		window.display();
 

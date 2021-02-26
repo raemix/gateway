@@ -14,4 +14,5 @@ public:
 	void MoveDown();
 	void MoveLeft();
 	void MoveRight();
+	void animate(int* secs/*hehe*/);
 };

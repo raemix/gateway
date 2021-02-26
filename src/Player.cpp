@@ -15,6 +15,7 @@ Player::Player(Vector2 pos, SDL_Texture* tex, std::vector<Entity> x) : Entity(po
 
 // it just works
 
+
 void Player::MoveUp(){
 	for(Entity& e : x){
 		if((e.getPos().y == pos.y-16) && (e.getPos().x == pos.x)){
@@ -65,4 +66,8 @@ void Player::MoveRight(){
 			}
 		}
 	}
+}
+
+void Player::animate(int* secs){
+	currentFrame = { (*secs%14) * 16, 0, 16, 16 };
 }

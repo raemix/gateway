@@ -13,7 +13,6 @@
 
 Tilemap::Tilemap(const char* filePath){
 	{
-		//SDL_Texture* playerTexture = window.LoadTexture("res/gfx/player.png");
 	    rapidxml::file<> xmlFile(filePath);
 	    // dump document on heap
 	    rapidxml::xml_document<>* doc = new rapidxml::xml_document<>();
@@ -36,7 +35,7 @@ std::vector<Entity> Tilemap::createEntities(RenderWindow* win){
     int y = -1;
     unsigned int z = 0;
     for (unsigned int i = 0; i < map.size(); i++) {
-        if (i % 5 == 0) {
+        if (i % 6 == 0) {
             y++;
             z = 0;
         }
