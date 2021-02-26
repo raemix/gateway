@@ -46,6 +46,8 @@ std::vector<Entity> Tilemap::createEntities(RenderWindow* win){
         entities.push_back(Entity(Vector2((float)z*16,(float)y*16),texture));
         if(map[i] == '2'){
         	entities[i].setCollidable(true);
+        }else if (map[i] == '4'){
+            entities[i].setAnimatable(true,5);
         }
     }
     return entities;

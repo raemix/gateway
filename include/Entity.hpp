@@ -11,9 +11,14 @@ public:
 	SDL_Rect getCurrentFrame();
 	bool& getCollidable();
 	void setCollidable(bool x);
+	bool& getAnimatable();
+	void setAnimatable(bool animatable,int frameCount);
+	void animate(int* secs/*hehe*/);
 protected:
 	Vector2 pos;
+	int frameCount;
 	bool collidable = false;
+	bool animatable = false;
 	SDL_Rect currentFrame;
 	SDL_Texture* tex;
 };

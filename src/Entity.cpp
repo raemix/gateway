@@ -25,3 +25,16 @@ bool& Entity::getCollidable(){
 void Entity::setCollidable(bool x){
 	collidable = x;
 }
+
+bool& Entity::getAnimatable(){
+	return animatable;
+}
+
+void Entity::setAnimatable(bool animatable, int frameCount){
+	this->animatable = animatable;
+	this->frameCount = frameCount;
+}
+
+void Entity::animate(int* secs){
+	currentFrame = { (*secs%frameCount) * 16, 0, 16, 16 };
+}

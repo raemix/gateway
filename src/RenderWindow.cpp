@@ -9,7 +9,7 @@ RenderWindow::RenderWindow(const char* title, int width, int height)
 	:window(NULL), renderer(NULL), width(width),height(height){
 	window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
 	if(window==NULL){
-		std::cout << "window didnt initialize :'( " << SDL_GetError() << std::endl;
+		std::cout << "Window could not initialize. Error: " << SDL_GetError() << std::endl;
 	}
 
 	renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
@@ -23,7 +23,7 @@ SDL_Texture* RenderWindow::LoadTexture(const char* filePath){
 	texture = IMG_LoadTexture(renderer,filePath);
 
 	if(texture == NULL){
-		std::cout << "aw hell naw that texture aint loadin :( " << SDL_GetError() << std::endl;
+		std::cout << "Texture could not initialize. Error: " << SDL_GetError() << std::endl;
 	}
 	return texture;
 }
@@ -33,10 +33,6 @@ int RenderWindow::getRefreshRate(){
 	SDL_DisplayMode mode;
 	SDL_GetDisplayMode(displayIndex,0,&mode);
 	return mode.refresh_rate;
-}
-
-RenderWindow::~RenderWindow(){
-	SDL_DestroyWindow(window);
 }
 
 void RenderWindow::clear(){
@@ -56,4 +52,8 @@ void RenderWindow::render(Entity& ent)
 
 void RenderWindow::display(){
 	SDL_RenderPresent(renderer);
+}
+
+RenderWindow::~RenderWindow(){
+	SDL_DestroyWindow(window);
 }

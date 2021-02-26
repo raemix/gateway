@@ -7,12 +7,11 @@ class RenderWindow{
 public:
 	RenderWindow(const char* title, int width, int height);
 	SDL_Texture* LoadTexture(const char* filePath);
-	
 	int getRefreshRate();
-	~RenderWindow();
 	void clear();
 	void render(Entity& ent);
 	void display();
+	~RenderWindow();
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
