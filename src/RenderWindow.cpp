@@ -14,8 +14,10 @@ RenderWindow::RenderWindow(const char* title, int width, int height)
 
 	renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
 
+	SDL_SetRenderDrawColor(renderer, 32, 21, 51, 255);
+
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
-	SDL_RenderSetLogicalSize(renderer, 96, 96);
+	SDL_RenderSetLogicalSize(renderer, 128, 128);
 }
 
 SDL_Texture* RenderWindow::LoadTexture(const char* filePath){

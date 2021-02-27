@@ -13,7 +13,8 @@ public:
 	void setCollidable(bool x);
 	bool& getAnimatable();
 	void setAnimatable(bool animatable,int frameCount);
-	void animate(int* secs/*hehe*/);
+	void animate(int secs/*hehe*/);
+	void setCurrentFrame(SDL_Rect currentFrame);
 protected:
 	Vector2 pos;
 	int frameCount;

@@ -43,7 +43,7 @@ std::vector<Entity> Tilemap::createEntities(RenderWindow* win){
         char x[] = "res/gfx/tile .png";
         x[12] = map[i]-1;
         SDL_Texture* texture = win->LoadTexture(x);
-        entities.push_back(Entity(Vector2((float)z*16,(float)y*16),texture));
+        entities.push_back(Entity(Vector2((float)z*16+16,(float)y*16+16),texture));
         if(map[i] == '2'){
         	entities[i].setCollidable(true);
         }else if (map[i] == '4'){

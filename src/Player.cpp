@@ -5,7 +5,7 @@
 #include "Entity.hpp"
 #include "Player.hpp"
 
-Player::Player(Vector2 pos, SDL_Texture* tex, Mix_Chunk* moveSound, std::vector<Entity> x) : Entity(pos, tex){
+Player::Player(Vector2 pos, SDL_Texture* tex, Mix_Chunk* moveSound, std::vector<Entity> x) : Entity(Vector2(16,16), tex){
 	this->x = x;
 	this->moveSound = moveSound;
 }
@@ -73,3 +73,11 @@ void Player::MoveRight(){
 		}
 	}
 }
+
+// int Player::getState(){
+// 	return state;
+// }
+
+// void Player::setState(int state){
+// 	this->state = state;
+// }

@@ -11,12 +11,42 @@
 #include "Utils.hpp"
 #include "Tilemap.hpp"
 
+// void process_input(input, character, delta){
+//   if (character.getState() != character.IDLE){
+//     update_position(character, delta);
+//     return;
+//   }
+//   if (input.isKeyDown(Input.KEY_A && x != 0){
+//     character.setState(MOVING_LEFT);
+//     character.setTargetX(X - Game.TILE_SIZE);
+//     update_position(character, delta);
+//   }
+//   else if ... // same logic for UP, DOWN and RIGHT
+// }
+
+// void update_position (character, delta){
+//   if (character.getState() == MOVING_LEFT){
+//     if (character.getX() == character.getTargetX()){
+//       return;
+//     }
+//     newX = character.getX() - (character.getMovespeed() * delta);
+//     if (newX <= character.getTargetX()){
+//       newX = charcter.getTargetX();
+//       character.setState(IDLE);
+//     }
+//     charater.setX(newX);
+//   }
+//   else if ... // same logic for UP, DOWN and RIGHT
+// }
+
 
 void handleInput(SDL_Event* event, Player* character, bool* running){
 	while(SDL_PollEvent(event)){
 		if(event->type == SDL_QUIT )*running = false;
 
 		else if (event->type == SDL_KEYDOWN && event->key.repeat == 0){
+			SDL_Rect rec{0,0,16,16};
+			character->setCurrentFrame(rec);
 			switch(event->key.keysym.sym){
 				case SDLK_w:
 					character->MoveUp();
@@ -41,7 +71,7 @@ int main(int argc, char* args[]){
 
 	if(!IMG_Init(IMG_INIT_PNG)) std::cout << "SDL_Image could not initialize. Error: " << SDL_GetError() << std::endl;
 
-	Audio mixer(44100,MIX_DEFAULT_FORMAT,2,2048);
+	Audio mixer(44100,MIX_DEFAULT_FORMAT,2,248);
 
 	RenderWindow window("gateway",512,512);
 	Tilemap tiles("res/dev/tilemap.tmx");
@@ -76,12 +106,12 @@ int main(int argc, char* args[]){
 
 		}
 
-		character.animate(&seconds);
+		character.animate(seconds);
 		window.clear();
 
 		for(Entity& e : entities){
 			if(e.getAnimatable()){
-				e.animate(&seconds);
+				e.animate(seconds);
 			}
 			window.render(e);
 		}

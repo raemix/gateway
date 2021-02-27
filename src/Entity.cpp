@@ -35,6 +35,10 @@ void Entity::setAnimatable(bool animatable, int frameCount){
 	this->frameCount = frameCount;
 }
 
-void Entity::animate(int* secs){
-	currentFrame = { (*secs%frameCount) * 16, 0, 16, 16 };
+void Entity::animate(int secs){
+	currentFrame = { (secs%frameCount) * 16, 0, 16, 16 };
+}
+
+void Entity::setCurrentFrame(SDL_Rect currentFrame){
+	this->currentFrame = currentFrame;
 }
