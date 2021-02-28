@@ -4,6 +4,7 @@
 #include "Math.hpp"
 #include "Entity.hpp"
 #include "RenderWindow.hpp"
+#include "Player.hpp"
 #include <sstream>
 #include <string>
 #include <vector>
@@ -14,7 +15,7 @@
 class Tilemap{
 public:
 	Tilemap(const char* filePath);
-	std::vector<Entity> createEntities(RenderWindow* win);
+	std::vector<Entity> createEntities(RenderWindow* win,Player* character);
 private:
 	std::string map;
 	std::vector<Entity> entities;

@@ -31,7 +31,7 @@ Tilemap::Tilemap(const char* filePath){
 	}
 }
 
-std::vector<Entity> Tilemap::createEntities(RenderWindow* win){
+std::vector<Entity> Tilemap::createEntities(RenderWindow* win, Player* character){
     int y = -1;
     unsigned int z = 0;
     for (unsigned int i = 0; i < map.size(); i++) {
@@ -48,6 +48,8 @@ std::vector<Entity> Tilemap::createEntities(RenderWindow* win){
         	entities[i].setCollidable(true);
         }else if (map[i] == '4'){
             entities[i].setAnimatable(true,5);
+        }else if (map[i] == '3'){
+            character->portalPushBack(entities[i].getPos());
         }
     }
     return entities;

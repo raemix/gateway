@@ -4,10 +4,13 @@
 #include "Math.hpp"
 #include "Entity.hpp"
 #include "Player.hpp"
+#include <string>
 
-Player::Player(Vector2 pos, SDL_Texture* tex, Mix_Chunk* moveSound, std::vector<Entity> x) : Entity(Vector2(16,16), tex){
-	this->x = x;
+Player::Player(Vector2 pos, SDL_Texture* tex, Mix_Chunk* moveSound,Mix_Chunk* teleportSound, Mix_Chunk* deathSound) : Entity(Vector2(16,16), tex){
 	this->moveSound = moveSound;
+	this->teleportSound = teleportSound;
+	this->deathSound = deathSound;
+	moves = moveCounts[currentLevel];
 }
 
 
@@ -19,10 +22,11 @@ Player::Player(Vector2 pos, SDL_Texture* tex, Mix_Chunk* moveSound, std::vector<
 
 
 void Player::MoveUp(){
-	for(Entity& e : x){
+	for(Entity& e : entities){
 		if((e.getPos().y == pos.y-16) && (e.getPos().x == pos.x)){
 			if(e.getCollidable() == false){
 				pos.y -= 16;
+				moves -= 1;
 				Mix_PlayChannel(-1,moveSound,0);
 				break;
 			}else{
@@ -33,10 +37,11 @@ void Player::MoveUp(){
 }
 
 void Player::MoveDown(){
-	for(Entity& e : x){
+	for(Entity& e : entities){
 		if((e.getPos().y == pos.y+16) && (e.getPos().x == pos.x)){
 			if(e.getCollidable() == false){
 				pos.y += 16;
+				moves -= 1;
 				Mix_PlayChannel(-1,moveSound,0);
 				break;
 			}else{
@@ -47,10 +52,11 @@ void Player::MoveDown(){
 }
 
 void Player::MoveLeft(){
-	for(Entity& e : x){
+	for(Entity& e : entities){
 		if((e.getPos().x == pos.x-16) && (e.getPos().y == pos.y)){
 			if(e.getCollidable() == false){
 				pos.x -= 16;
+				moves -= 1;
 				Mix_PlayChannel(-1,moveSound,0);
 				break;
 			}else{
@@ -61,10 +67,11 @@ void Player::MoveLeft(){
 }
 
 void Player::MoveRight(){
-	for(Entity& e : x){
+	for(Entity& e : entities){
 		if((e.getPos().x == pos.x+16) && (e.getPos().y == pos.y)){
 			if(e.getCollidable() == false){
 				pos.x += 16;
+				moves -= 1;
 				Mix_PlayChannel(-1,moveSound,0);
 				break;
 			}else{
@@ -74,10 +81,42 @@ void Player::MoveRight(){
 	}
 }
 
-// int Player::getState(){
-// 	return state;
-// }
+const char* Player::getMoves(){
+	std::string m = std::to_string(moves);
+	m = "Moves: " + m;
+	return m.c_str();
+}
 
-// void Player::setState(int state){
-// 	this->state = state;
-// }
+bool Player::checkMoves(){
+	if(moves > 0){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+void Player::setEntities(std::vector<Entity>* entities){
+	this->entities = *entities;
+}
+
+void Player::portalPushBack(Vector2 position){
+	portalPositions.push_back(position);
+}
+
+void Player::teleport(){
+	if(currentPortal < portalPositions.size()){
+		pos = portalPositions[currentPortal];
+		currentPortal++;
+		Mix_PlayChannel(-1,teleportSound,0);
+	}
+}
+
+void Player::restart(){
+	if(currentPortal > 0){
+		currentPortal--;
+	}
+	moves = moveCounts[currentLevel];
+	pos = Vector2(16,16);
+	Mix_PlayChannel(-1,deathSound,0);
+	
+}

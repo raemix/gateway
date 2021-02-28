@@ -1,8 +1,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include <vector>
 #include <string>
+#include <cmath>
 #include "RenderWindow.hpp"
 #include "Audio.hpp"
 #include "Entity.hpp"
@@ -11,54 +13,33 @@
 #include "Utils.hpp"
 #include "Tilemap.hpp"
 
-// void process_input(input, character, delta){
-//   if (character.getState() != character.IDLE){
-//     update_position(character, delta);
-//     return;
-//   }
-//   if (input.isKeyDown(Input.KEY_A && x != 0){
-//     character.setState(MOVING_LEFT);
-//     character.setTargetX(X - Game.TILE_SIZE);
-//     update_position(character, delta);
-//   }
-//   else if ... // same logic for UP, DOWN and RIGHT
-// }
-
-// void update_position (character, delta){
-//   if (character.getState() == MOVING_LEFT){
-//     if (character.getX() == character.getTargetX()){
-//       return;
-//     }
-//     newX = character.getX() - (character.getMovespeed() * delta);
-//     if (newX <= character.getTargetX()){
-//       newX = charcter.getTargetX();
-//       character.setState(IDLE);
-//     }
-//     charater.setX(newX);
-//   }
-//   else if ... // same logic for UP, DOWN and RIGHT
-// }
-
-
 void handleInput(SDL_Event* event, Player* character, bool* running){
 	while(SDL_PollEvent(event)){
 		if(event->type == SDL_QUIT )*running = false;
 
-		else if (event->type == SDL_KEYDOWN && event->key.repeat == 0){
-			SDL_Rect rec{0,0,16,16};
-			character->setCurrentFrame(rec);
+		else if (event->type == SDL_KEYDOWN && event->key.repeat == 0 && SDL_GetTicks() > 6000){
+			if(character->checkMoves()){
+				switch(event->key.keysym.sym){
+					case SDLK_w:
+						character->MoveUp();
+						break;
+					case SDLK_a:
+						character->MoveLeft();
+						break;
+					case SDLK_s:
+						character->MoveDown();
+						break;
+					case SDLK_d:
+						character->MoveRight();
+						break;
+				}
+			}
 			switch(event->key.keysym.sym){
-				case SDLK_w:
-					character->MoveUp();
+				case SDLK_SPACE:
+					character->teleport();
 					break;
-				case SDLK_a:
-					character->MoveLeft();
-					break;
-				case SDLK_s:
-					character->MoveDown();
-					break;
-				case SDLK_d:
-					character->MoveRight();
+				case SDLK_r:
+					character->restart();
 					break;
 			}
 		}
@@ -68,21 +49,24 @@ void handleInput(SDL_Event* event, Player* character, bool* running){
 
 int main(int argc, char* args[]){
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) > 0) std::cout << "SDL could not initialize. Error: " << SDL_GetError() << std::endl;
-
+	if(TTF_Init() < 0) std::cout << "SDL_TTF could not initialize. Error: " << SDL_GetError() << std::endl;
 	if(!IMG_Init(IMG_INIT_PNG)) std::cout << "SDL_Image could not initialize. Error: " << SDL_GetError() << std::endl;
 
 	Audio mixer(44100,MIX_DEFAULT_FORMAT,2,248);
-
 	RenderWindow window("gateway",512,512);
 	Tilemap tiles("res/dev/tilemap.tmx");
-
 	Mix_Chunk* move = mixer.LoadChunk("res/sfx/move.wav");
-
-	std::vector<Entity> entities = tiles.createEntities(&window);
-
+	Mix_Chunk* teleport = mixer.LoadChunk("res/sfx/teleport.wav");
+	Mix_Chunk* death = mixer.LoadChunk("res/sfx/death.wav");
+	TTF_Font* font = TTF_OpenFont("res/ttf/brixel-8x8.ttf", 8);
+	SDL_Texture* controlsTexture = window.LoadTexture("res/gfx/keys.png");
 	SDL_Texture* playerTexture = window.LoadTexture("res/gfx/player.png");
-    Player character(Vector2((float)0,(float)0),playerTexture,move,entities);
+    Player character(Vector2((float)0,(float)0),playerTexture,move,teleport,death);
     character.setAnimatable(true,14);
+
+	std::vector<Entity> entities = tiles.createEntities(&window, &character);
+
+	character.setEntities(&entities);
 
 	SDL_Event event;
 	bool running = true;
@@ -106,24 +90,39 @@ int main(int argc, char* args[]){
 
 		}
 
-		character.animate(seconds);
-		window.clear();
+		if (SDL_GetTicks() < 3000)
+		{
+			window.clear();
+			window.renderCenter(0, sin(SDL_GetTicks()/200) * 2 - 20, "anactualhuman", font, SDL_Color{ 255, 255, 255 });
+			window.renderCenter(0, -sin(SDL_GetTicks()/200) * 2 + 20, "powered by SDL2", font, SDL_Color{ 255, 255, 255 });
+			window.display();
+		}else if(SDL_GetTicks() < 6000){
+			window.clear();
+			window.renderCenter(0,sin(SDL_GetTicks()/200) * 2, controlsTexture);
+			window.display();
+		}else{
 
-		for(Entity& e : entities){
-			if(e.getAnimatable()){
-				e.animate(seconds);
+			character.animate(seconds);
+			window.clear();
+
+			for(Entity& e : entities){
+				if(e.getAnimatable()){
+					e.animate(seconds);
+				}
+				window.render(e);
 			}
-			window.render(e);
-		}
-		window.render(character);
+			window.render(character);
+			window.renderCenter(0, -56, character.getMoves(), font, SDL_Color{ 255, 255, 255 });
 
-		window.display();
+			window.display();
+		}
 
 		int frameTicks = SDL_GetTicks() - startTicks;
 		if(frameTicks < 1000 / window.getRefreshRate())
 			SDL_Delay(1000 / window.getRefreshRate()-frameTicks);
 	}
 
+	TTF_Quit();
 	SDL_Quit();
 
 	return 0;
