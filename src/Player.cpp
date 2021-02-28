@@ -104,7 +104,7 @@ void Player::portalPushBack(Vector2 position){
 }
 
 void Player::teleport(){
-	if(currentPortal < portalPositions.size()){
+	if(currentPortal < (signed)portalPositions.size()){
 		pos = portalPositions[currentPortal];
 		currentPortal++;
 		Mix_PlayChannel(-1,teleportSound,0);

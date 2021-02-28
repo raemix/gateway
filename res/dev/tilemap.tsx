@@ -12,5 +12,8 @@
  </tile>
  <tile id="3">
   <image width="80" height="16" source="../gfx/tile3.png"/>
+  <animation>
+   <frame tileid="3" duration="100"/>
+  </animation>
  </tile>
 </tileset>

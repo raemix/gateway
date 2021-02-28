@@ -58,7 +58,7 @@ void RenderWindow::render(float x, float y, SDL_Texture* tex){
 	SDL_Rect src{0,0};
 	SDL_QueryTexture(tex, NULL, NULL, &src.w, &src.h); 
 
-	SDL_Rect dst{x,y,src.w,src.h};
+	SDL_Rect dst{(int)x,(int)y,src.w,src.h};
 
 	SDL_RenderCopy(renderer, tex, &src, &dst);
 }
@@ -68,7 +68,7 @@ void RenderWindow::render(float x, float y, const char* text, TTF_Font* font, SD
 		SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
 		SDL_Rect src{0,0,surfaceMessage->w,surfaceMessage->h};
-		SDL_Rect dst{x,y,src.w,src.h};
+		SDL_Rect dst{(int)x,(int)y,src.w,src.h};
 
 		SDL_RenderCopy(renderer, message, &src, &dst);
 		SDL_FreeSurface(surfaceMessage);
@@ -80,7 +80,7 @@ void RenderWindow::renderCenter(float x, float y, const char* text, TTF_Font* fo
 
 		SDL_Rect src{0,0,surfaceMessage->w,surfaceMessage->h};
 
-		SDL_Rect dst{128/2 - src.w/2 + x,128/2 - src.h/2 + y,src.w,src.h};
+		SDL_Rect dst{128/2 - src.w/2 + (int)x,128/2 - src.h/2 + (int)y,src.w,src.h};
 
 		SDL_RenderCopy(renderer, message, &src, &dst);
 		SDL_FreeSurface(surfaceMessage);
@@ -92,7 +92,7 @@ void RenderWindow::renderCenter(float x, float y, SDL_Texture* tex){
 	src.y = 0;
 	SDL_QueryTexture(tex, NULL, NULL, &src.w, &src.h); 
 
-	SDL_Rect dst{128/2 - src.w/2 + x,128/2 - src.h/2 + y,src.w,src.h};
+	SDL_Rect dst{128/2 - src.w/2 + (int)x,128/2 - src.h/2 + (int)y,src.w,src.h};
 
 	SDL_RenderCopy(renderer, tex, &src, &dst);
 }
