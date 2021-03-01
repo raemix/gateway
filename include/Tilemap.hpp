@@ -3,8 +3,6 @@
 #include <SDL2/SDL_image.h>
 #include "Math.hpp"
 #include "Entity.hpp"
-#include "RenderWindow.hpp"
-#include "Player.hpp"
 #include <sstream>
 #include <string>
 #include <vector>
@@ -14,8 +12,8 @@
 
 class Tilemap{
 public:
-	Tilemap(const char* filePath);
-	std::vector<Entity> createEntities(RenderWindow* win,Player* character);
+	void loadTilemap(const char* filePath);
+	std::pair<std::vector<Entity>,Vector2> createEntities();
 private:
 	std::string map;
 	std::vector<Entity> entities;

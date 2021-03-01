@@ -13,11 +13,14 @@ public:
 	void setCollidable(bool x);
 	bool& getAnimatable();
 	void setAnimatable(bool animatable,int frameCount);
+	void setGoal(bool goal);
+	bool& getGoal();
 	void animate(int secs/*hehe*/);
 	void setCurrentFrame(SDL_Rect currentFrame);
 protected:
 	Vector2 pos;
 	int frameCount;
+	bool goal = false;
 	bool collidable = false;
 	bool animatable = false;
 	SDL_Rect currentFrame;

@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Audio.hpp"
 
-Audio::Audio(int frequency, Uint16 format, int channels, int chunksize){
+void Audio::start(int frequency, Uint16 format, int channels, int chunksize){
 	if(Mix_OpenAudio(frequency,format,channels,chunksize) < 0){
 		std::cout << "Audio could not initialize. Error: " << Mix_GetError() << std::endl; 
 	}

@@ -5,7 +5,7 @@
 
 class Audio{
 public:
-	Audio(int frequency, Uint16 format, int channels, int chunksize);
+	void start(int frequency, Uint16 format, int channels, int chunksize);
 	Mix_Music* LoadMusic(const char* filePath);
 	Mix_Chunk* LoadChunk(const char* filePath);
 	~Audio();

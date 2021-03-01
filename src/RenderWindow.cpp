@@ -6,8 +6,12 @@
 #include "Entity.hpp"
 #include "RenderWindow.hpp"
 
-RenderWindow::RenderWindow(const char* title, int width, int height)
-	:window(NULL), renderer(NULL), width(width),height(height){
+void RenderWindow::start(const char* title, int width, int height)
+{
+	window = NULL;
+	renderer = NULL;
+	this->width = width;
+	this->height = height;
 	window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
 	if(window==NULL){
 		std::cout << "Window could not initialize. Error: " << SDL_GetError() << std::endl;

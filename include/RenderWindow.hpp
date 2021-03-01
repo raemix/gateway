@@ -2,11 +2,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "Entity.hpp"
+
+class Entity;
 
 class RenderWindow{
 public:
-	RenderWindow(const char* title, int width, int height);
+	RenderWindow(){};
+	void start(const char* title, int width, int height);
 	SDL_Texture* LoadTexture(const char* filePath);
 	int getRefreshRate();
 	void clear();

@@ -1,6 +1,4 @@
 #include "Entity.hpp"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
 Entity::Entity(Vector2 pos, SDL_Texture* tex):pos(pos),tex(tex){
 	currentFrame = {0,0,16,16};
@@ -33,6 +31,14 @@ bool& Entity::getAnimatable(){
 void Entity::setAnimatable(bool animatable, int frameCount){
 	this->animatable = animatable;
 	this->frameCount = frameCount;
+}
+
+void Entity::setGoal(bool goal){
+	this->goal = goal;
+}
+
+bool& Entity::getGoal(){
+	return goal;
 }
 
 void Entity::animate(int secs){

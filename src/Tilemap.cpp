@@ -1,37 +1,30 @@
 #include "Tilemap.hpp"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include "Math.hpp"
-#include "Entity.hpp"
+#include "Main.hpp"
 #include "RenderWindow.hpp"
-#include <sstream>
-#include <string>
-#include <vector>
-#include "rapidxml-1.13/rapidxml_utils.hpp"
-#include "rapidxml-1.13/rapidxml_print.hpp"
-#include "rapidxml-1.13/rapidxml.hpp"
+#include "Player.hpp"
 
-Tilemap::Tilemap(const char* filePath){
-	{
-	    rapidxml::file<> xmlFile(filePath);
-	    // dump document on heap
-	    rapidxml::xml_document<>* doc = new rapidxml::xml_document<>();
-	    doc->parse<0>(xmlFile.data());
-	    rapidxml::xml_node<>* node = doc->first_node("map")->first_node("layer")->first_node("data");
+void Tilemap::loadTilemap(const char* filePath){
+	map = "";
+    rapidxml::file<> xmlFile(filePath);
+    // dump document on heap
+    rapidxml::xml_document<>* doc = new rapidxml::xml_document<>();
+    doc->parse<0>(xmlFile.data());
+    rapidxml::xml_node<>* node = doc->first_node("map")->first_node("layer")->first_node("data");
 
-	    std::stringstream ss;
-	    ss << *node;
+    std::stringstream ss;
+    ss << *node;
 
 
-	    for (unsigned int i = 0; i < ss.str().length(); i++) {
-	        if (std::isdigit(ss.str()[i])) map += ss.str()[i];
-	    }
+    for (unsigned int i = 0; i < ss.str().length(); i++) {
+        if (std::isdigit(ss.str()[i])) map += ss.str()[i];
+    }
 
-	    delete doc;
-	}
+    delete doc;
 }
 
-std::vector<Entity> Tilemap::createEntities(RenderWindow* win, Player* character){
+std::pair<std::vector<Entity>,Vector2> Tilemap::createEntities(){
+	Vector2 portalPos;
+	entities.clear();
     int y = -1;
     unsigned int z = 0;
     for (unsigned int i = 0; i < map.size(); i++) {
@@ -42,15 +35,20 @@ std::vector<Entity> Tilemap::createEntities(RenderWindow* win, Player* character
         else z++;
         char x[] = "res/gfx/tile .png";
         x[12] = map[i]-1;
-        SDL_Texture* texture = win->LoadTexture(x);
+        SDL_Texture* texture = window.LoadTexture(x);
         entities.push_back(Entity(Vector2((float)z*16+16,(float)y*16+16),texture));
-        if(map[i] == '2'){
-        	entities[i].setCollidable(true);
-        }else if (map[i] == '4'){
-            entities[i].setAnimatable(true,5);
-        }else if (map[i] == '3'){
-            character->portalPushBack(entities[i].getPos());
+        switch(map[i]){
+        	case '2':
+        		entities[i].setCollidable(true);
+        		break;
+        	case '4':
+        		entities[i].setGoal(true);
+        		entities[i].setAnimatable(true,5);
+        		break;
+        	case '3':
+        		portalPos = entities[i].getPos();
+        		break;
         }
     }
-    return entities;
+    return {entities,portalPos};
 }
