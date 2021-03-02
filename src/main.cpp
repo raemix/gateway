@@ -15,7 +15,9 @@ Mix_Chunk* startUpSound;
 Mix_Chunk* move;
 Mix_Chunk* teleport;
 Mix_Chunk* death;
+//Mix_Music* bgm;
 SDL_Texture* controlsTexture;
+SDL_Texture* bgTexture;
 //
 
 RenderWindow window;
@@ -24,6 +26,8 @@ Tilemap tiles;
 
 std::vector<Entity> entities;
 Vector2 portal;
+Vector2 bg1Pos = Vector2(0,0);
+Vector2 bg2Pos = Vector2(-128,0);
 
 // timestep stuff
 const float timeStep = .01f;
@@ -46,14 +50,15 @@ bool init(){
 	if(!IMG_Init(IMG_INIT_PNG)) std::cout << "SDL_Image could not initialize. Error: " << SDL_GetError() << std::endl;
 
 	window.start("game",512,512);
-	mixer.start(44100,MIX_DEFAULT_FORMAT,2,248);
+	mixer.start(44100,MIX_DEFAULT_FORMAT,2,1240);
 
 	font = TTF_OpenFont("res/ttf/brixel-8x8.ttf", 8);
-	startUpSound = mixer.LoadChunk("res/sfx/startup.wav");
 	move = mixer.LoadChunk("res/sfx/move.wav");
 	teleport = mixer.LoadChunk("res/sfx/teleport.wav");
 	death = mixer.LoadChunk("res/sfx/death.wav");
+	//bgm = mixer.LoadMusic("res/sfx/???.mp3");
 	controlsTexture = window.LoadTexture("res/gfx/keys.png");
+	bgTexture = window.LoadTexture("res/gfx/bg.png");
 	character.setAnimatable(true,14);
 
 	return true;
@@ -62,7 +67,6 @@ bool init(){
 bool initialize = init(); 
 
 Player character(Vector2((float)16,(float)16),window.LoadTexture("res/gfx/player.png"),move,teleport,death);
-
 
 void loadLevel(const char* level){
 	entities.clear();
@@ -81,7 +85,7 @@ void handleInput(SDL_Event* event, bool* running){
 	while(SDL_PollEvent(event)){
 		if(event->type == SDL_QUIT )*running = false;
 		
-		else if (event->type == SDL_KEYDOWN && event->key.repeat == 0 && SDL_GetTicks() > 4000){
+		else if (event->type == SDL_KEYDOWN && event->key.repeat == 0 && SDL_GetTicks() > 7500){
 			if(character.checkMoves()){
 				switch(event->key.keysym.sym){
 					case SDLK_w:
@@ -125,21 +129,32 @@ void loop(){
 
 	}
 
-	if (SDL_GetTicks() < 2000)
+	if (SDL_GetTicks() < 3000)
 	{
 		window.clear();
 		window.renderCenter(0, sin(SDL_GetTicks()/200) * 3 - 20, "anactualhuman", font, SDL_Color{ 255, 255, 255 });
 		window.renderCenter(0, -sin(SDL_GetTicks()/200) * 3 + 20, "powered by SDL2", font, SDL_Color{ 255, 255, 255 });
 		window.display();
 	}
-	else if(SDL_GetTicks() < 4000){
+	else if(SDL_GetTicks() < 7500){
 		window.clear();
 		window.renderCenter(0,sin(SDL_GetTicks()/200) * 2, controlsTexture);
 		window.display();
 	}else
 	{
+
 		character.animate(seconds);
 		window.clear();
+		bg1Pos.x += 48 * timeStep;
+		bg2Pos.x += 48 * timeStep;
+		if(bg1Pos.x >= 128){
+			bg1Pos.x = -128;
+		}
+		if(bg2Pos.x >= 128){
+			bg2Pos.x = -128;
+		}
+		window.renderCenter(bg1Pos.x,bg1Pos.y,bgTexture);
+		window.renderCenter(bg2Pos.x,bg2Pos.y,bgTexture);
 		for(Entity& e : entities){
 			if(e.getAnimatable()){
 				e.animate(seconds);
@@ -159,7 +174,7 @@ void loop(){
 }
 
 int main(int argc, char* args[]){
-	Mix_PlayChannel(-1,startUpSound,0);
+	//Mix_PlayMusic(bgm,-1);
 
 	loadLevel("res/dev/tilemap1.tmx");
 

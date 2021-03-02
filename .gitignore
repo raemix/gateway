@@ -34,3 +34,6 @@
 # Sublime
 *.sublime-project
 *.sublime-workspace
+
+# Licenced mp3 files
+*.mp3
