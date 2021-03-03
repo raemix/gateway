@@ -1,11 +1,11 @@
-#include "Main.hpp"
-#include "RenderWindow.hpp"
-#include "Audio.hpp"
-#include "Utils.hpp"
-#include "Entity.hpp"
-#include "Tilemap.hpp"
-#include "Math.hpp"
-#include "Player.hpp"
+#include "../include/Main.hpp"
+#include "../include/RenderWindow.hpp"
+#include "../include/Audio.hpp"
+#include "../include/Utils.hpp"
+#include "../include/Entity.hpp"
+#include "../include/Tilemap.hpp"
+#include "../include/Math.hpp"
+#include "../include/Player.hpp"
 #include <iostream>
 
 
@@ -44,9 +44,9 @@ bool running = true;
 bool init(){
 
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) > 0) std::cout << "SDL could not initialize. Error: " << SDL_GetError() << std::endl;
-	
+
 	if(TTF_Init() < 0) std::cout << "SDL_TTF could not initialize. Error: " << SDL_GetError() << std::endl;
-	
+
 	if(!IMG_Init(IMG_INIT_PNG)) std::cout << "SDL_Image could not initialize. Error: " << SDL_GetError() << std::endl;
 
 	window.start("game",512,512);
@@ -64,7 +64,7 @@ bool init(){
 	return true;
 }
 
-bool initialize = init(); 
+bool initialize = init();
 
 Player character(Vector2((float)16,(float)16),window.LoadTexture("res/gfx/player.png"),move,teleport,death);
 
@@ -84,7 +84,7 @@ void loadLevel(const char* level){
 void handleInput(SDL_Event* event, bool* running){
 	while(SDL_PollEvent(event)){
 		if(event->type == SDL_QUIT )*running = false;
-		
+
 		else if (event->type == SDL_KEYDOWN && event->key.repeat == 0 && SDL_GetTicks() > 7500){
 			if(character.checkMoves()){
 				switch(event->key.keysym.sym){

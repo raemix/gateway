@@ -1,7 +1,7 @@
-#include "Tilemap.hpp"
-#include "Main.hpp"
-#include "RenderWindow.hpp"
-#include "Player.hpp"
+#include "../include/Tilemap.hpp"
+#include "../include/Main.hpp"
+#include "../include/RenderWindow.hpp"
+#include "../include/Player.hpp"
 
 void Tilemap::loadTilemap(const char* filePath){
 	map = "";
@@ -33,7 +33,7 @@ std::pair<std::vector<Entity>,Vector2> Tilemap::createEntities(){
             z = 0;
         }
         else z++;
-        char x[] = "res/gfx/tile .png";
+        char x[] = "res/gfx/tile.png";
         x[12] = map[i]-1;
         SDL_Texture* texture = window.LoadTexture(x);
         entities.push_back(Entity(Vector2((float)z*16+16,(float)y*16+16),texture));

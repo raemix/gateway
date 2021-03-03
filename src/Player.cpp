@@ -1,7 +1,7 @@
-#include "Player.hpp"
-#include "RenderWindow.hpp"
-#include "Audio.hpp"
-#include "Main.hpp"
+#include "../include/Player.hpp"
+#include "../include/RenderWindow.hpp"
+#include "../include/Audio.hpp"
+#include "../include/Main.hpp"
 #include <iostream>
 
 Player::Player(Vector2 pos, SDL_Texture* tex, Mix_Chunk* moveSound,Mix_Chunk* teleportSound, Mix_Chunk* deathSound) : Entity(pos, tex){

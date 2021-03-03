@@ -1,4 +1,4 @@
-#include "Entity.hpp"
+#include "../include/Entity.hpp"
 
 Entity::Entity(Vector2 pos, SDL_Texture* tex):pos(pos),tex(tex){
 	currentFrame = {0,0,16,16};

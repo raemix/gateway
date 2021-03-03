@@ -3,8 +3,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 
-#include "Entity.hpp"
-#include "RenderWindow.hpp"
+#include "../include/Entity.hpp"
+#include "../include/RenderWindow.hpp"
 
 void RenderWindow::start(const char* title, int width, int height)
 {
@@ -60,7 +60,7 @@ void RenderWindow::render(Entity& ent)
 
 void RenderWindow::render(float x, float y, SDL_Texture* tex){
 	SDL_Rect src{0,0};
-	SDL_QueryTexture(tex, NULL, NULL, &src.w, &src.h); 
+	SDL_QueryTexture(tex, NULL, NULL, &src.w, &src.h);
 
 	SDL_Rect dst{(int)x,(int)y,src.w,src.h};
 
@@ -94,7 +94,7 @@ void RenderWindow::renderCenter(float x, float y, SDL_Texture* tex){
 	SDL_Rect src{0,0};
 	src.x = 0;
 	src.y = 0;
-	SDL_QueryTexture(tex, NULL, NULL, &src.w, &src.h); 
+	SDL_QueryTexture(tex, NULL, NULL, &src.w, &src.h);
 
 	SDL_Rect dst{128/2 - src.w/2 + (int)x,128/2 - src.h/2 + (int)y,src.w,src.h};
 
