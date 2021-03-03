@@ -12,7 +12,7 @@ COMPILER_FLAGS = -w
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = game
+OBJ_NAME = game.app
 
 #This is the target that compiles our executable
 all : $(OBJS)
